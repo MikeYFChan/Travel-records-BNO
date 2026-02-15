@@ -14,8 +14,8 @@ A web-based tool designed to help UK BNO visa holders track their travel history
   - **12 個月滾動計算**：自動計算任何連續 12 個月內的缺勤天數。
 - **Settlement Progress**: Visual indicators for the 5-year residency path.
   - **永居進度**：5 年居留路徑的視覺化進度條。
-- **Data Privacy**: All data is stored locally in your browser (LocalStorage). No data is sent to any server.
-  - **數據隱私**：所有數據均儲存在瀏覽器本地（LocalStorage），不會傳送到任何伺服器。
+- **Data Privacy**: All data is stored **locally on your own computer** (in your browser's LocalStorage). No data is sent to any server or shared with anyone.
+  - **數據隱私**：所有數據均**只會儲存在用戶嘅電腦入面**（瀏覽器本地 LocalStorage），不會傳送到任何伺服器，確保私隱。
 - **Export/Import**: Backup your data to CSV or import from a previous backup.
   - **匯出/匯入**：將數據備份為 CSV 或從備份匯入。
 
