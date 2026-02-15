@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BNO Travel Tracker | BNO 旅遊紀錄工具</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo-area">
+                <h1>BNO Travel Tracker</h1>
+                <p class="subtitle">Settlement Eligibility Helper | 永居申請紀錄工具</p>
+            </div>
+            <div class="header-actions">
+                <button id="export-csv" class="btn btn-secondary">Export CSV | 匯出備份</button>
+                <button id="import-btn" class="btn btn-secondary">Import | 匯入</button>
+                <input type="file" id="csv-file" accept=".csv" style="display: none;">
+            </div>
+        </header>
+
+        <main>
+            <!-- Family Overview section -->
+            <section class="family-section">
+                <div class="card">
+                    <h2>Family Overview | 全家狀態總覽</h2>
+                    <div id="family-grid" class="family-grid">
+                        <!-- Family members will be injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Section (Personal) -->
+            <section class="dashboard">
+                <div style="display:none">
+                    <select id="user-filter">
+                        <option value="all">All Records | 全部紀錄</option>
+                    </select>
+                </div>
+                <div class="stat-card">
+                    <h3>Settlement Progress | 永居進度</h3>
+                    <div id="progress-container">
+                        <!-- 5 Checkmarks will be injected here -->
+                    </div>
+                    <div id="application-date-info" class="app-date-info">
+                        <strong>Earliest Apply | 最早申請:</strong> <span id="earliest-app-date">-</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Rolling 12M Absence | 12個月累計缺勤</h3>
+                    <div class="stat-value"><span id="max-absence-year">0</span> / 180 Days</div>
+                    <div class="progress-bar-bg">
+                        <div id="absence-progress" class="progress-bar-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Add Record Form -->
+            <section class="form-section">
+                <div class="card">
+                    <h2>Add Travel Record | 新增旅遊紀錄</h2>
+                    <form id="travel-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="user-name">User Name | 使用者名稱</label>
+                                <input type="text" id="user-name" list="user-list" placeholder="e.g. Mike" required>
+                                <datalist id="user-list"></datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="visa-grant-date-form">Visa Grant Date | 簽證簽發日期</label>
+                                <input type="date" id="visa-grant-date-form">
+                                <small>Set once per user | 每個成員只需輸入一次</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="departure-date">Departure Date | 離開日期</label>
+                                <input type="date" id="departure-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="return-date">Return Date | 回到日期</label>
+                                <input type="date" id="return-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="flight-info">Flight Info | 航班資料</label>
+                                <input type="text" id="flight-info" placeholder="e.g. CX251">
+                            </div>
+                            <div class="form-group">
+                                <label for="notes">Notes | 備註</label>
+                                <input type="text" id="notes" placeholder="e.g. Vacation">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="add-btn">Add Record | 加入紀錄</button>
+                            <button type="button" class="btn btn-secondary" id="cancel-btn" onclick="cancelEdit()"
+                                style="display: none;">Cancel | 取消</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Records List -->
+            <section class="records-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Absence Records | 缺勤紀錄</h2>
+                        <div class="info-tag">⚠️ Calculation: Only full days outside UK count.</div>
+                    </div>
+                    <div class="table-container">
+                        <table id="records-table">
+                            <thead>
+                                <tr>
+                                    <th>Departure | 離開</th>
+                                    <th>Return | 回來</th>
+                                    <th>Flight | 航班</th>
+                                    <th>Days Absent | 缺勤天數</th>
+                                    <th>Notes | 備註</th>
+                                    <th>Action | 操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="records-body">
+                                <!-- Records will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 BNO Travel Tracker Helper. Data stored locally in browser.</p>
+            <p>Reference: <a href="https://www.gov.uk/british-national-overseas-bno-visa/settle-in-the-uk"
+                    target="_blank">UK Gov BNO Settlement Rules</a></p>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
