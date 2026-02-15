@@ -408,59 +408,79 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('export-csv').addEventListener('click', () => {
-        if (travelRecords.length === 0) return;
-        let csv = "User,VisaGrantDate,Departure,Return,Flight,Notes\n";
-        travelRecords.forEach(r => {
-            const visaDate = userProfiles[r.userName]?.visaGrantDate || '';
-            csv += `"${r.userName}","${visaDate}",${r.departure},${r.returnDate},"${r.flight}","${r.notes}"\n`;
-        });
-        const blob = new Blob([csv], { type: 'text/csv' });
+        // Enhance records with redundant visa date for visibility
+        const enhancedRecords = travelRecords.map(r => ({
+            ...r,
+            visaGrantDate: userProfiles[r.userName]?.visaGrantDate || ''
+        }));
+
+        const backupData = {
+            travelRecords: enhancedRecords,
+            userProfiles: userProfiles,
+            exportDate: new Date().toISOString(),
+            version: "1.1"
+        };
+        const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'bno_family_records.csv';
+        a.download = `bno_backup_${new Date().toISOString().split('T')[0]}.json`;
         a.click();
     });
 
     document.getElementById('import-btn').addEventListener('click', () => document.getElementById('csv-file').click());
     document.getElementById('csv-file').addEventListener('change', (e) => {
+        if (!e.target.files.length) return;
         const reader = new FileReader();
         reader.onload = (ev) => {
-            const lines = ev.target.result.split('\n');
-            if (lines.length < 2) return;
+            try {
+                const importedData = JSON.parse(ev.target.result);
 
-            const header = lines[0].split(',').map(c => c.replace(/"/g, '').trim());
-            const hasVisaDate = header.includes('VisaGrantDate');
-            const dataRows = lines.slice(1);
-
-            dataRows.forEach(row => {
-                if (!row.trim()) return;
-                const cols = row.split(',').map(c => c.replace(/"/g, '').trim());
-
-                if (hasVisaDate && cols.length >= 4) {
-                    // New format: User, VisaGrantDate, Departure, Return, ...
-                    const userName = cols[0];
-                    const visaDate = cols[1];
-                    if (visaDate) {
-                        userProfiles[userName] = { ...userProfiles[userName], visaGrantDate: visaDate };
-                    }
-                    travelRecords.push({
-                        id: Date.now() + Math.random(),
-                        userName, departure: cols[2], returnDate: cols[3],
-                        flight: cols[4] || '', notes: cols[5] || ''
-                    });
-                } else if (!hasVisaDate && cols.length >= 3) {
-                    // Old format: User, Departure, Return, ...
-                    travelRecords.push({
-                        id: Date.now() + Math.random(),
-                        userName: cols[0], departure: cols[1], returnDate: cols[2],
-                        flight: cols[3] || '', notes: cols[4] || ''
+                // 1. Merge User Profiles (Main source)
+                if (importedData.userProfiles) {
+                    Object.keys(importedData.userProfiles).forEach(userName => {
+                        userProfiles[userName] = {
+                            ...(userProfiles[userName] || {}),
+                            ...importedData.userProfiles[userName]
+                        };
                     });
                 }
-            });
-            updateUI();
+
+                // 2. Merge Travel Records and recover visa dates if missing from profiles
+                if (importedData.travelRecords && Array.isArray(importedData.travelRecords)) {
+                    importedData.travelRecords.forEach(newRec => {
+                        // Recovery: if record has a visa date but profile doesn't, recover it
+                        if (newRec.userName && newRec.visaGrantDate && !userProfiles[newRec.userName]?.visaGrantDate) {
+                            userProfiles[newRec.userName] = {
+                                ...(userProfiles[newRec.userName] || {}),
+                                visaGrantDate: newRec.visaGrantDate
+                            };
+                        }
+
+                        const isDuplicate = travelRecords.some(oldRec =>
+                            oldRec.userName === newRec.userName &&
+                            oldRec.departure === newRec.departure &&
+                            oldRec.returnDate === newRec.returnDate
+                        );
+
+                        if (!isDuplicate) {
+                            // Strip redundant visa date from storage to keep it clean, but keep the record
+                            const { visaGrantDate, ...cleanRecord } = newRec;
+                            const recToPush = { ...cleanRecord, id: Date.now() + Math.random() };
+                            travelRecords.push(recToPush);
+                        }
+                    });
+                }
+
+                alert('Import Successful! | 匯入成功！');
+                updateUI();
+            } catch (err) {
+                console.error(err);
+                alert('Invalid backup file. | 無效的備份檔案。');
+            }
         };
         reader.readAsText(e.target.files[0]);
+        e.target.value = ''; // Reset input
     });
 
     updateUI();

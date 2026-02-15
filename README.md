@@ -16,8 +16,8 @@ A web-based tool designed to help UK BNO visa holders track their travel history
   - **永居進度**：5 年居留路徑的視覺化進度條。
 - **Data Privacy**: All data is stored **locally on your own computer** (in your browser's LocalStorage). No data is sent to any server or shared with anyone.
   - **數據隱私**：所有數據均**只會儲存在用戶嘅電腦入面**（瀏覽器本地 LocalStorage），不會傳送到任何伺服器，確保私隱。
-- **Export/Import**: Backup your data to CSV or import from a previous backup.
-  - **匯出/匯入**：將數據備份為 CSV 或從備份匯入。
+- **Export/Import**: Backup your data to **JSON** or import from a previous backup. This preserves all family profiles and travel data perfectly.
+  - **匯出/匯入**：將數據備份為 **JSON** 格式或從備份匯入。呢個格式可以 100% 完整保存所有成員資料同進度。
 
 ---
 
