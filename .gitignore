@@ -1,0 +1,10 @@
+# OS X
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+
+# Local data (if naming convention changes)
+*.csv
+!example_export.csv
