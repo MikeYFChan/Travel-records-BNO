@@ -409,8 +409,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('export-csv').addEventListener('click', () => {
         if (travelRecords.length === 0) return;
-        let csv = "User,Departure,Return,Flight,Notes\n";
-        travelRecords.forEach(r => csv += `"${r.userName}",${r.departure},${r.returnDate},"${r.flight}","${r.notes}"\n`);
+        let csv = "User,VisaGrantDate,Departure,Return,Flight,Notes\n";
+        travelRecords.forEach(r => {
+            const visaDate = userProfiles[r.userName]?.visaGrantDate || '';
+            csv += `"${r.userName}","${visaDate}",${r.departure},${r.returnDate},"${r.flight}","${r.notes}"\n`;
+        });
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -423,13 +426,35 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('csv-file').addEventListener('change', (e) => {
         const reader = new FileReader();
         reader.onload = (ev) => {
-            const rows = ev.target.result.split('\n').slice(1);
-            rows.forEach(row => {
+            const lines = ev.target.result.split('\n');
+            if (lines.length < 2) return;
+
+            const header = lines[0].split(',').map(c => c.replace(/"/g, '').trim());
+            const hasVisaDate = header.includes('VisaGrantDate');
+            const dataRows = lines.slice(1);
+
+            dataRows.forEach(row => {
+                if (!row.trim()) return;
                 const cols = row.split(',').map(c => c.replace(/"/g, '').trim());
-                if (cols.length >= 3) {
+
+                if (hasVisaDate && cols.length >= 4) {
+                    // New format: User, VisaGrantDate, Departure, Return, ...
+                    const userName = cols[0];
+                    const visaDate = cols[1];
+                    if (visaDate) {
+                        userProfiles[userName] = { ...userProfiles[userName], visaGrantDate: visaDate };
+                    }
                     travelRecords.push({
                         id: Date.now() + Math.random(),
-                        userName: cols[0], departure: cols[1], returnDate: cols[2], flight: cols[3] || '', notes: cols[4] || ''
+                        userName, departure: cols[2], returnDate: cols[3],
+                        flight: cols[4] || '', notes: cols[5] || ''
+                    });
+                } else if (!hasVisaDate && cols.length >= 3) {
+                    // Old format: User, Departure, Return, ...
+                    travelRecords.push({
+                        id: Date.now() + Math.random(),
+                        userName: cols[0], departure: cols[1], returnDate: cols[2],
+                        flight: cols[3] || '', notes: cols[4] || ''
                     });
                 }
             });
