@@ -45,8 +45,8 @@ For the most accurate and up-to-date information, please refer to the official U
 
 ## 🛠️ How to Use | 如何使用
 
-1.  **Online Version**: Open the tool directly in your browser: [https://mikeyfchan.github.io/Travel-records-BNO/](https://mikeyfchan.github.io/Travel-records-BNO/)
-    - **直接執行網頁**：直接在瀏覽器開啟：[https://mikeyfchan.github.io/Travel-records-BNO/](https://mikeyfchan.github.io/Travel-records-BNO/)
+1.  **Online Version**: Open the tool directly in your browser: [https://mikeyfchan.github.io/BNO_travel_tracker/](https://mikeyfchan.github.io/BNO_travel_tracker/)
+    - **直接執行網頁**：直接在瀏覽器開啟：[https://mikeyfchan.github.io/BNO_travel_tracker/](https://mikeyfchan.github.io/BNO_travel_tracker/)
 2.  **Clone or Download**: Download this repository to your local computer.
     - **複製或下載**：將此儲存庫下載到您的電腦。
 3.  **Open in Browser**: Open `index.html` in any modern web browser (Chrome, Safari, Firefox, Edge).
