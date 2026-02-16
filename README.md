@@ -45,11 +45,13 @@ For the most accurate and up-to-date information, please refer to the official U
 
 ## 🛠️ How to Use | 如何使用
 
-1.  **Clone or Download**: Download this repository to your local computer.
+1.  **Online Version**: Open the tool directly in your browser: [https://mikeyfchan.github.io/Travel-records-BNO/](https://mikeyfchan.github.io/Travel-records-BNO/)
+    - **直接執行網頁**：直接在瀏覽器開啟：[https://mikeyfchan.github.io/Travel-records-BNO/](https://mikeyfchan.github.io/Travel-records-BNO/)
+2.  **Clone or Download**: Download this repository to your local computer.
     - **複製或下載**：將此儲存庫下載到您的電腦。
-2.  **Open in Browser**: Open `index.html` in any modern web browser (Chrome, Safari, Firefox, Edge).
+3.  **Open in Browser**: Open `index.html` in any modern web browser (Chrome, Safari, Firefox, Edge).
     - **瀏覽器開啟**：在任何現代瀏覽器中開啟 `index.html`。
-3.  **Enter Records**: Add family members, their visa grant dates, and travel periods.
+4.  **Enter Records**: Add family members, their visa grant dates, and travel periods.
     - **輸入紀錄**：加入家庭成員、簽證簽發日期以及旅遊時段。
 
 ---
